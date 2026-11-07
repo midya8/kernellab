@@ -3,7 +3,7 @@
 Exact small-data Gaussian-process regression from scratch: fixed RBF kernel,
 Cholesky conditioning, latent versus observation uncertainty, log marginal
 likelihood and row leave-one-out diagnostics. Dependency-free Python 3.10+,
-25 tests, train/predict JSON CLI and an offline, reproducible visual demo.
+36 tests, train/predict JSON CLI and an offline, reproducible visual demo.
 Standard GP theory, not a new method or a scalable GP package.
 
 ![Two fixed GP length scales, same observations and shared axes](assets/posterior.svg)
@@ -40,6 +40,64 @@ no parameter search or test-based selection routine. The fixture was inspected
 during development; it is not an untouched benchmark. Coverage across correlated
 function locations from this one fixture is not calibration evidence, a
 simultaneous band, a confidence guarantee, or a universal model ranking.
+
+## Finite-candidate expected improvement
+
+```python
+from kernellab import suggest
+# Use a validated fit(...)["model"] with noise_variance=0.
+proposal = suggest(model, [[0.0], [0.5], [1.0]], xi=0.01)
+# proposal["suggestion"] contains index, row, mean, latent_variance and EI.
+# proposal["candidates"] audits every score and excluded known row.
+```
+
+`suggest` is **deterministic maximization only** and requires zero observation
+noise. It does not evaluate an objective, spend, call a service or change the
+model. Training jitter may still perturb the posterior. For mean mu, latent
+SD sigma, best observed target b and nonnegative exploration offset xi:
+`delta=mu-b-xi`, `EI=delta*Phi(delta/sigma)+sigma*phi(delta/sigma)`.
+At zero variance the exact deterministic limit is `max(delta,0)`, rather than
+an unconditional zero. The standalone `expected_improvement` API tests that
+limit and a numerical Gaussian quadrature reference. CDF uses erfc for stable
+tails; tiny cancellation negatives are bounded at zero.
+
+1-128 unique candidates, matching model width. Exact binary64 coordinate matches
+to training rows are excluded, not merely discouraged. Duplicate candidates are
+errors; no hidden distance tolerance. Exact ties retain the first eligible
+index. An all-known pool returns `status="exhausted"`, `suggestion=null`.
+If every eligible EI is zero, the first eligible candidate is still returned;
+this is not a convergence claim. The full audit preserves original indices.
+Standalone mean/incumbent bounds are [-1e12,1e12], variance [0,1e12], xi [0,1e6].
+
+```sh
+python -m kernellab suggest --input suggestion-request.json
+# {"model": <zero-noise model>, "candidates": [[0.5], [1.5]], "xi": 0.01}
+python -m kernellab optimize-demo
+```
+
+![Equal-evaluation-budget finite-grid optimization](assets/optimization.svg)
+
+The offline optimization demo maximizes `sin(2*x)+0.4*cos(5*x)-0.05*x*x` on an
+81-point grid [-4,4], step0.1. Each policy starts at grid indices0/40/80 and gets
+six more evaluations: **nine total including initialization**. EI uses fixed
+length0.7/signal variance1/noise0/jitter1e-8/prior mean0/xi0.01. Farthest-point
+space filling and uniform random without replacement (seed29) have the same
+candidate pool and evaluation budget. Neither control uses target values to
+choose its next point. The full traces and evaluated targets are returned.
+
+| Policy, 9 evaluations each | Best observed | Finite-grid simple regret |
+|---|---:|---:|
+| Expected improvement | 1.045544 at x=-2.5 | 0.000163 |
+| Farthest-point space filling | 0.972762 at x=1 | 0.072944 |
+| Uniform random, seed29 | 0.646233 | 0.399473 |
+
+The grid oracle is 1.045706 at x=-2.4, computed only after all policies finish
+for reporting, never for selection. The objective/settings and one random seed
+are development examples, without a parameter/seed sweep. No statistical,
+universal speedup or continuous-global-optimum claim. Different objectives,
+priors, seeds, budgets and candidate pools can reverse the result. This is not
+a noisy-EI method, batch acquisition optimizer or safe autonomous experiment
+runner. Only the built-in offline demo executes its public toy objective.
 
 ## Condition, audit, serialize, predict
 
@@ -125,7 +183,7 @@ Dense factorization and the LOO audit cost O(n^3), storage O(n^2). Prediction
 refactors the artifact, then uses O(m*n^2) triangular work; optional joint
 covariance adds O(m^2*n) work and O(m^2) storage. Small-data educational scope.
 No sparse approximations, learned kernels, ARD, gradients, optimizer, weights,
-missing/categorical values, multi-output, sampling, acquisition function,
+missing/categorical values, multi-output, sampling, continuous/batch/noisy acquisition optimization,
 causal claim, automatic deployment or production-performance promise.
 
 The Gaussian iid noise/RBF/supplied-mean assumptions are substantive. Row LOO
@@ -140,19 +198,25 @@ for empirical validation. No paid service, model download or network call.
 python -m unittest discover -s tests -v
 ```
 
-25 tests cover an analytic one-point posterior and marginal likelihood,
+36 tests cover an analytic one-point posterior and marginal likelihood,
 Cholesky reconstruction/linear solves, an independent tiny Gauss-Jordan inverse
 reference, explicit LOO refits, own-target exclusion, duplicate-point failure
 and explicit-jitter recovery, noiseless interpolation, far-field prior return,
 variance independence from targets, covariance symmetry/diagonal/quadratic
 checks, counted tiny-negative clamping and material-negative rejection, row permutation, multidimensional inputs, bounds/schema validation,
 no input mutation, artifact round trips, CLI errors and deterministic metrics.
-CI runs Python 3.10-3.13 and the offline demo.
+Additional acquisition tests cover analytic/degenerate EI, independent numerical
+Gaussian integration, tail behavior, translation/scaling, exploration offset,
+known-row exclusion, exact ties, exhausted/zero-EI pools, duplicate/noisy-input
+rejection, CLI audits and equal-budget measured optimization traces.
+CI runs Python 3.10-3.13 and the offline demo, regenerating both SVGs.
 
 ## Sources and credit
 
 - [Rasmussen & Williams (2006), GPML Chapter 2, Algorithm 2.1](https://gaussianprocess.org/gpml/chapters/RW2.pdf): Cholesky conditioning, predictive uncertainty and marginal likelihood.
 - [GPML Chapter 5, equation 5.12](https://gaussianprocess.org/gpml/chapters/RW5.pdf): fixed-parameter leave-one-out conditional means and variances.
+- [MIT Bayesian optimization lecture, expected improvement](https://www.mit.edu/~gfarina/2024/67220s24_L16_bayesian_optimization/L16.pdf): acquisition as expected positive improvement (minimization convention).
+- [GPax acquisition documentation](https://gpax.readthedocs.io/en/stable/acquisition.html): Gaussian EI formula for maximization. KernelLab uses a deterministic positive-part zero-variance limit and does not reproduce GPax inference or noisy acquisition.
 - [Gregory Gundersen, practical GP regression](https://www.gregorygundersen.com/blog/2019/09/12/practical-gp-regression/): explanatory Cholesky treatment.
 
 Independent implementation of standard formulas. No source code copied from a
