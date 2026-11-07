@@ -30,3 +30,25 @@ print('serialized GP predicts means, latent uncertainty and noisy observations')
 PY
 PYTHONPATH=. python examples/render_demo.py
 git diff --exit-code -- assets/posterior.svg 2>/dev/null || { test ! -d .git; }
+python -m kernellab optimize-demo
+python - <<'PY'
+import json
+from kernellab import fit,suggest
+payload={'rows':[[0],[1]],'targets':[0,1],
+         'kernel':{'length_scale':.7,'signal_variance':1.,'noise_variance':0.,'jitter':1e-8,'prior_mean':0.}}
+model=fit(payload)['model']
+with open('/tmp/kernellab-suggest.json','w') as dest:
+    json.dump({'model':model,'candidates':[[0],[.5],[1],[1.5]],'xi':.01},dest)
+assert suggest(model,[[0],[1]])['status']=='exhausted'
+print('all-known candidate pool returns no false next suggestion')
+PY
+python -m kernellab suggest --input /tmp/kernellab-suggest.json >/tmp/kernellab-suggestion.json
+python - <<'PY'
+import json
+with open('/tmp/kernellab-suggestion.json') as source:report=json.load(source)
+assert report['suggestion']['index'] in (1,3)
+assert report['candidates'][0]['expected_improvement'] is None
+print('candidate EI audit excludes already evaluated rows')
+PY
+PYTHONPATH=. python examples/render_optimization.py
+git diff --exit-code -- assets/optimization.svg 2>/dev/null || { test ! -d .git; }
