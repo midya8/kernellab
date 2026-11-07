@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="610" viewBox="0 0 900 610" role="img" aria-labelledby="title desc">
+<title id="title">KernelLab finite-grid optimization: same evaluation budget</title>
+<desc id="desc">Best observed deterministic objective by total evaluations, including three shared initial points. EI, farthest-point and one seeded random policy. Grid oracle is report-only.</desc>
+<rect width="900" height="610" fill="#fff"/><g font-family="Arial,sans-serif" fill="#251f21">
+<text x="40" y="40" font-size="28" font-weight="600">Same grid. Same evaluation budget.</text>
+<text x="40" y="68" font-size="16" font-weight="400">Maximize sin(2x) + 0.4 cos(5x) - 0.05x^2 on 81 fixed candidates.</text>
+<line x1="80" x2="835" y1="395.0" y2="395.0" stroke="#eae9ea"/>
+<text x="43" y="400.0" font-size="14" font-weight="400">0.2</text>
+<line x1="80" x2="835" y1="341.0" y2="341.0" stroke="#eae9ea"/>
+<text x="43" y="346.0" font-size="14" font-weight="400">0.4</text>
+<line x1="80" x2="835" y1="287.0" y2="287.0" stroke="#eae9ea"/>
+<text x="43" y="292.0" font-size="14" font-weight="400">0.6</text>
+<line x1="80" x2="835" y1="232.99999999999997" y2="232.99999999999997" stroke="#eae9ea"/>
+<text x="43" y="237.99999999999997" font-size="14" font-weight="400">0.8</text>
+<line x1="80" x2="835" y1="179.0" y2="179.0" stroke="#eae9ea"/>
+<text x="43" y="184.0" font-size="14" font-weight="400">1.0</text>
+<line x1="80" x2="835" y1="125.0" y2="125.0" stroke="#eae9ea"/>
+<text x="43" y="130.0" font-size="14" font-weight="400">1.2</text>
+<text x="75.0" y="417" font-size="14" font-weight="400">3</text>
+<text x="200.83333333333331" y="417" font-size="14" font-weight="400">4</text>
+<text x="326.66666666666663" y="417" font-size="14" font-weight="400">5</text>
+<text x="452.5" y="417" font-size="14" font-weight="400">6</text>
+<text x="578.3333333333333" y="417" font-size="14" font-weight="400">7</text>
+<text x="704.1666666666667" y="417" font-size="14" font-weight="400">8</text>
+<text x="830.0" y="417" font-size="14" font-weight="400">9</text>
+<text x="300" y="443" font-size="15" font-weight="400">Total objective evaluations (including 3 shared initial)</text>
+<text x="40" y="104" font-size="15" font-weight="400">Best observed objective (unitless)</text>
+<line x1="80" x2="835" y1="166.65932807121385" y2="166.65932807121385" stroke="#585254" stroke-dasharray="4 4"/>
+<text x="85" y="156.65932807121385" font-size="14" font-weight="400">Report-only grid oracle 1.045706</text>
+<polyline points="80.00,341.00 205.83,186.35 331.67,186.35 457.50,186.35 583.33,186.35 709.17,166.70 835.00,166.70" fill="none" stroke="#34715f" stroke-width="3" stroke-dasharray=""/>
+<circle cx="80.00" cy="341.00" r="3.5" fill="#34715f"/>
+<circle cx="205.83" cy="186.35" r="3.5" fill="#34715f"/>
+<circle cx="331.67" cy="186.35" r="3.5" fill="#34715f"/>
+<circle cx="457.50" cy="186.35" r="3.5" fill="#34715f"/>
+<circle cx="583.33" cy="186.35" r="3.5" fill="#34715f"/>
+<circle cx="709.17" cy="166.70" r="3.5" fill="#34715f"/>
+<circle cx="835.00" cy="166.70" r="3.5" fill="#34715f"/>
+<line x1="40" x2="67" y1="477" y2="477" stroke="#34715f" stroke-width="3" stroke-dasharray=""/>
+<text x="80" y="482" font-size="15" font-weight="600">Expected improvement: best 1.045544; finite-grid regret 0.000163</text>
+<polyline points="80.00,341.00 205.83,341.00 331.67,341.00 457.50,341.00 583.33,341.00 709.17,186.35 835.00,186.35" fill="none" stroke="#251f21" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="80.00" cy="341.00" r="3.5" fill="#251f21"/>
+<circle cx="205.83" cy="341.00" r="3.5" fill="#251f21"/>
+<circle cx="331.67" cy="341.00" r="3.5" fill="#251f21"/>
+<circle cx="457.50" cy="341.00" r="3.5" fill="#251f21"/>
+<circle cx="583.33" cy="341.00" r="3.5" fill="#251f21"/>
+<circle cx="709.17" cy="186.35" r="3.5" fill="#251f21"/>
+<circle cx="835.00" cy="186.35" r="3.5" fill="#251f21"/>
+<line x1="40" x2="67" y1="503" y2="503" stroke="#251f21" stroke-width="3" stroke-dasharray="6 3"/>
+<text x="80" y="508" font-size="15" font-weight="400">Farthest-point: best 0.972762; finite-grid regret 0.072944</text>
+<polyline points="80.00,341.00 205.83,341.00 331.67,341.00 457.50,290.68 583.33,290.68 709.17,274.52 835.00,274.52" fill="none" stroke="#827b7d" stroke-width="3" stroke-dasharray="3 3"/>
+<circle cx="80.00" cy="341.00" r="3.5" fill="#827b7d"/>
+<circle cx="205.83" cy="341.00" r="3.5" fill="#827b7d"/>
+<circle cx="331.67" cy="341.00" r="3.5" fill="#827b7d"/>
+<circle cx="457.50" cy="290.68" r="3.5" fill="#827b7d"/>
+<circle cx="583.33" cy="290.68" r="3.5" fill="#827b7d"/>
+<circle cx="709.17" cy="274.52" r="3.5" fill="#827b7d"/>
+<circle cx="835.00" cy="274.52" r="3.5" fill="#827b7d"/>
+<line x1="40" x2="67" y1="529" y2="529" stroke="#827b7d" stroke-width="3" stroke-dasharray="3 3"/>
+<text x="80" y="534" font-size="15" font-weight="400">Uniform random, seed 29: best 0.646233; finite-grid regret 0.399473</text>
+<text x="40" y="567" font-size="15" font-weight="400">One development objective and one random seed, not a general optimizer ranking.</text>
+<text x="40" y="590" font-size="15" font-weight="400">EI: fixed kernel, latent variance, zero observation noise. Oracle never enters selection.</text>
+</g></svg>
