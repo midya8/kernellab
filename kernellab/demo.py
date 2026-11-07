@@ -38,3 +38,46 @@ def run_demo():
                     'length scales on development data, no parameter search or test-based selection routine. '
                     'Test points span [-5,5]; training [-3,3]. 2-SD coverage is descriptive for one correlated function realization, '
                     'not calibration proof or a general GP ranking. Wrong kernel/mean can be confidently wrong.'}
+
+
+def run_optimization_demo():
+    """Equal-budget policies on a fixed, public deterministic grid objective."""
+    from .acquisition import suggest
+    objective=lambda x:math.sin(2*x)+.4*math.cos(5*x)-.05*x*x
+    grid=[[-4+i/10] for i in range(81)];arms={}
+    for policy in ('expected_improvement','farthest_point','uniform_random_seed29'):
+        rng=random.Random(29)
+        indices=[0,40,80];targets=[objective(grid[i][0]) for i in indices];trace=[]
+        for _ in range(6):
+            if policy=='expected_improvement':
+                model=fit({'rows':[grid[i] for i in indices],'targets':targets,
+                    'kernel':{'length_scale':.7,'signal_variance':1.,'noise_variance':0.,'jitter':1e-8,'prior_mean':0.}})['model']
+                report=suggest(model,grid,xi=.01);choice=report['suggestion'];index=choice['index']
+                policy_score=choice['expected_improvement']
+            elif policy=='uniform_random_seed29':
+                available=[i for i in range(len(grid)) if i not in indices]
+                index=rng.choice(available);policy_score=None
+            else:
+                available=[i for i in range(len(grid)) if i not in indices]
+                # Same grid and budget, deterministic space-filling policy independent of objective values.
+                index=max(available,key=lambda i:min(abs(grid[i][0]-grid[j][0]) for j in indices))
+                policy_score=min(abs(grid[index][0]-grid[j][0]) for j in indices)
+            assert index not in indices
+            target=objective(grid[index][0]);indices.append(index);targets.append(target)
+            trace.append({'evaluation':len(indices),'grid_index':index,'x':grid[index][0],
+                          'observed_target':target,'best_observed':max(targets),'policy_score':policy_score})
+        arms[policy]={'evaluations':len(indices),'initial_grid_indices':[0,40,80],
+                      'evaluated_grid_indices':indices,'observed_targets':list(targets),'best_observed':max(targets),
+                      'best_x':grid[indices[max(range(len(targets)),key=targets.__getitem__)]][0],'trace':trace}
+    # Full-grid oracle is computed for reporting only, after all policies finish.
+    oracle_index=max(range(len(grid)),key=lambda i:objective(grid[i][0]));oracle=objective(grid[oracle_index][0])
+    for arm in arms.values():arm['finite_grid_simple_regret']=oracle-arm['best_observed']
+    return {'objective':'sin(2*x)+0.4*cos(5*x)-0.05*x*x (maximize)',
+            'grid':{'rows':81,'lower':-4,'upper':4,'step':.1},'budget_including_initial':9,'arms':arms,
+            'report_only_grid_oracle':{'x':grid[oracle_index][0],'value':oracle},
+            'scope':'Selected deterministic development objective, not a benchmark or universal optimizer ranking. '
+                    'All policies start at grid indices0/40/80 and get6 more evaluations; same81-point pool. '
+                    'Farthest-point uses first-index ties and no objective values for selection. '
+                    'EI uses fixed length.7/signal1/noise0/jitter1e-8/mean0/xi.01, no parameter sweep. '
+                    'Only the built-in offline demo evaluates the objective; suggest itself never does. '
+                    'Seed29 random samples without replacement, no objective values for selection. Oracle grid values are report-only after all loops; no continuous-global-optimum guarantee.'}
