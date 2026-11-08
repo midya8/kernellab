@@ -3,16 +3,20 @@ from pathlib import Path
 from decimal import Decimal as D,localcontext
 from kernellab.core import fit,predict,rbf
 from kernellab.response import inspect
-from kernellab.response_export import saved,build
+from kernellab.response_export import saved,build,assert_reproduces
 
 class ResponseTests(unittest.TestCase):
-    def test_archive_original_reproduction(self):self.assertEqual(build(),saved())
+    def test_archive_original_reproduction(self):
+        assert_reproduces(build(),saved())
+        for value in [1.00000001,float('nan'),True]:
+            with self.assertRaises(AssertionError):assert_reproduces({'a':[value]},{'a':[1.]})
+        with self.assertRaises(AssertionError):assert_reproduces({'a':[1.,2.]},{'a':[1.]})
     def test_202queries_3030weight_edits(self):
         r=saved()
         for a in r['arms'].values():
             m=a['report']['model'];self.assertEqual(len(a['references']),101)
             for i,(row,ref) in enumerate(zip(r['query'],a['references'])):
-                self.assertEqual(inspect(m,row),ref)
+                assert_reproduces(inspect(m,row),ref)
                 for j,curve in enumerate(a['unit_target_edit_curves']):
                     self.assertAlmostEqual(ref['original_mean']+ref['weights'][j],curve['means'][i],places=11)
                     self.assertEqual(ref['latent_variance'],curve['latent_variances'][i]);self.assertEqual(ref['observation_variance'],curve['observation_variances'][i])
