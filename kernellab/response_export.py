@@ -1,5 +1,5 @@
 """Reproduce original regression fixture; retain every original result."""
-import json
+import json,math
 from pathlib import Path
 from .core import fit,predict
 from .demo import fixture,run_demo,run_optimization_demo
@@ -16,6 +16,18 @@ def build():
             edits.append(predict(dict(report['model'],targets=[y+d for y,d in zip(targets,deltas)]),query))
         arms[name]=dict(report=report,references=refs,unit_target_edit_curves=edits)
     return dict(version=1,arms=arms,query=query,report_only_test=test,report_only_truth=truth,original_demo=run_demo(),original_optimization_demo=run_optimization_demo())
+
+def assert_reproduces(actual,expected,path='root'):
+    """Exact structure/non-numeric data, 1e-12 abs/rel binary64 portability."""
+    if isinstance(expected,dict):
+        assert isinstance(actual,dict) and actual.keys()==expected.keys(),path
+        for key in expected:assert_reproduces(actual[key],expected[key],path+'.'+key)
+    elif isinstance(expected,list):
+        assert isinstance(actual,list) and len(actual)==len(expected),path
+        for i,(a,b) in enumerate(zip(actual,expected)):assert_reproduces(a,b,path+'['+str(i)+']')
+    elif type(expected) is float:
+        assert type(actual) in (int,float) and math.isfinite(actual) and math.isclose(actual,expected,rel_tol=1e-12,abs_tol=1e-12),(path,actual,expected)
+    else:assert type(actual) is type(expected) and actual==expected,(path,actual,expected)
 
 def encoded(x):return json.dumps(x,separators=(',',':'),allow_nan=False)+'\n'
 def export(root):
