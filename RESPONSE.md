@@ -44,7 +44,7 @@ python -m pip install --target /tmp/installed /tmp/wheels/kernellab-0.2.0-py3-no
 bash examples/verify_wheel.sh /tmp/installed
 ```
 
-Two arm files store original fit/LOO reports and all 15 direct unit-target-edit posterior curves. Eight bounded chunks retain all 202 query-response witnesses. The meta file retains all original regression/optimization summaries and report-only test/truth data; the exporter reproduces them. No original test was removed. JSON CLI duplicate keys now refuse globally instead of silently overwrite. Every original fit/predict/suggest/demo/optimize-demo command remains.
+Two arm files store original fit/LOO reports and all 15 direct unit-target-edit posterior curves. Eight bounded chunks retain all 202 query-response witnesses. The meta file retains all original regression/optimization summaries and report-only test/truth data; the exporter reproduces them. Archive reproduction requires exact keys, shapes and non-floating values, with 1e-12 absolute/relative tolerance for binary64 floats across Python/platform math builds. Small normalized residuals can differ in their final bits. A test rejects a 1e-8 perturbation, nonfinite values and changed structure. No original predictor tolerance or test was changed. No original test was removed. JSON CLI duplicate keys now refuse globally instead of silently overwrite. Every original fit/predict/suggest/demo/optimize-demo command remains.
 
 ## Independent checks
 
