@@ -222,3 +222,16 @@ CI runs Python 3.10-3.13 and the offline demo, regenerating both SVGs.
 Independent implementation of standard formulas. No source code copied from a
 GP library, synthetic data clearly labeled and no external-performance attribution.
 MIT license.
+
+## v0.2: a target edit moves the mean, not the variance
+
+[Open the live conditioning inspector](https://midya8.github.io/kernellab/). Keep both original fixed kernels, all 15 observations and all original metrics while editing one target and an arbitrary query. Signed target-response weights, complete additive terms and separate latent/observation bands make the fixed-assumption boundary visible. Narrower bands still do not rescue the original misspecified model.
+
+43 Python tests and four Node/actual-Chrome tests include 202 complete response witnesses, 3,030 direct target-edit predictions, 48 high-precision tiny-system controls and every original GP/acquisition test. Installed reproduction imports eight modules and runs seven main commands plus full archive regeneration. No new fit selection, causal attribution, calibration or performance claim. [RESPONSE.md](RESPONSE.md) gives derivation, residual/roundoff gates, source distinctions and reproduction.
+
+```sh
+python -m kernellab.response_export
+python -m kernellab response-report
+python -m kernellab response --input examples/response.json
+node --test tests/*.cjs
+```

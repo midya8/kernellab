@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kernellab"
-version = "0.1.0"
+version = "0.2.0"
 description = "Exact fixed-parameter Gaussian-process regression and uncertainty audits"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -15,3 +15,6 @@ kernellab = "kernellab.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["kernellab*"]
+
+[tool.setuptools.package-data]
+kernellab = ["artifacts/*.json"]
