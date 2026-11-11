@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KernelLab · Joint uncertainty</title>
+    <meta
+      name="description"
+      content="Inspect full Gaussian-process covariance, signed linear contrasts and independent future observation noise."
+    />
+    <link rel="stylesheet" href="joint.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav>
+          <a href="./">Target-response inspector</a
+          ><a href="https://github.com/midya8/kernellab">KernelLab source</a>
+        </nav>
+        <p class="eyebrow">FIXED GAUSSIAN PROCESS / FULL JOINT COVARIANCE</p>
+        <h1>
+          Two error bars do not tell you the uncertainty of their difference.
+        </h1>
+        <p class="lede">
+          Keep every covariance term. Compare a linear contrast of one joint
+          posterior with the result of pretending its query values are
+          independent.
+        </p>
+        <p>
+          These are model distributions under supplied RBF, constant-mean and
+          Gaussian iid-noise assumptions. Smaller variance is not a check of
+          those assumptions. No fitting, calibration, sampling or simultaneous
+          confidence claim.
+        </p>
+      </header>
+      <section class="input-panel">
+        <h2>Choose a disclosed arithmetic control</h2>
+        <label for="control">Supplied input</label
+        ><select id="control"></select>
+        <p id="description"></p>
+        <details>
+          <summary>
+            Edit all training inputs, queries and linear weights
+          </summary>
+          <p>
+            Up to 16 training rows, eight queries, two features and four linear
+            weight rows. Weights are in [-10,10]. Repeated query rows mean the
+            same latent value but distinct future observation noises. Each
+            weight row has one coefficient per query. No weights are normalized.
+          </p>
+          <label for="input">Complete input JSON</label
+          ><textarea id="input" rows="20" spellcheck="false"></textarea
+          ><button id="restore">Restore selected control</button>
+        </details>
+        <p id="error" role="alert"></p>
+      </section>
+      <section>
+        <h2>One linear functional, all its pair terms</h2>
+        <label for="contrast">Selected linear weight row</label
+        ><select id="contrast"></select
+        ><label for="kind">Distribution</label
+        ><select id="kind">
+          <option value="latent">
+            Latent function values, no future noise
+          </option>
+          <option value="observation">
+            Future observations, iid noise per query occurrence
+          </option>
+        </select>
+        <div class="metrics">
+          <article>
+            <h3>Full joint variance</h3>
+            <p id="full">-</p>
+            <span>Covariances included. Not a calibrated error guarantee.</span>
+          </article>
+          <article>
+            <h3>Diagonal-only variance</h3>
+            <p id="diagonal">-</p>
+            <span
+              >Same pointwise means and variances, different assumed
+              dependence.</span
+            >
+          </article>
+          <article>
+            <h3>Off-diagonal contribution</h3>
+            <p id="offdiag">-</p>
+            <span
+              >Signed sum of all i ≠ j pair terms. Can increase or decrease
+              variance.</span
+            >
+          </article>
+        </div>
+        <p id="equation"></p>
+        <svg
+          id="bands"
+          role="img"
+          aria-label="Full-joint and diagonal-only plus or minus two model-standard-deviation intervals for the selected contrast"
+        ></svg>
+        <p>
+          Each interval is mean ±2 model SD for this one scalar Gaussian. It is
+          not a band covering every query or contrast together. A zero-width
+          interval is a deterministic linear value under these fixed
+          assumptions, not an observation of truth.
+        </p>
+        <table id="summary">
+          <thead>
+            <tr>
+              <th>Quantity</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Full query covariance</h2>
+        <p id="matrix-note"></p>
+        <div
+          class="scroll"
+          tabindex="0"
+          role="region"
+          aria-label="Complete query covariance, scroll horizontally on small screens"
+        >
+          <table id="covariance"></table>
+        </div>
+        <p>
+          Color is signed covariance, not correlation. A common symmetric scale
+          includes zero and every displayed cell; every number stays visible.
+        </p>
+        <h2>Every weighted pair contribution</h2>
+        <p>
+          Cell (i,j) is wᵢ Σᵢⱼ wⱼ. Both off-diagonal halves count in the sum.
+          Zero and negative terms are retained. In observation mode only
+          query-diagonal noise is added before weighting.
+        </p>
+        <div
+          class="scroll"
+          tabindex="0"
+          role="region"
+          aria-label="Complete weighted pair contributions, scroll horizontally on small screens"
+        >
+          <table id="pairs"></table>
+        </div>
+      </section>
+      <section>
+        <h2>Normalize nothing. Hide no repeated coordinates.</h2>
+        <div
+          class="scroll"
+          tabindex="0"
+          role="region"
+          aria-label="Query values and weights"
+        >
+          <table id="weights">
+            <thead>
+              <tr>
+                <th>Query index / row</th>
+                <th>Mean</th>
+                <th>Latent variance</th>
+                <th>Observation variance</th>
+                <th>Selected weight</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="groups"></p>
+        <h2>Contrasts share noise when they share observations</h2>
+        <p>
+          For weight matrix W, future observation covariance adds noise_variance
+          × W Wᵀ, not a fresh independent noise scalar per contrast. Repeated
+          latent coordinates coalesce; distinct query occurrences still carry
+          distinct iid noises.
+        </p>
+        <div
+          class="scroll"
+          tabindex="0"
+          role="region"
+          aria-label="Complete covariance between linear contrasts"
+        >
+          <table id="projected"></table>
+        </div>
+      </section>
+      <section>
+        <h2>The numerical computation stays explicit</h2>
+        <p>
+          Native conditioning uses the original Cholesky solver. This browser
+          independently uses unit-lower LDLᵀ solves. It groups identical latent
+          coordinates before the projected prior-minus-conditioning subtraction,
+          then compares with the direct full-covariance contraction. Small
+          negative variances may clamp under a reported gate; raw signed values
+          and disagreements stay in the JSON. No adaptive jitter, covariance
+          repair or PSD certificate.
+        </p>
+        <p>
+          Training jitter changes the conditioned model but is not future
+          observation noise. Ill-conditioned inputs may fail. A small numerical
+          residual is not a relative or forward-error bound, especially for a
+          contrast near zero. No probability of all queries being inside their
+          pointwise intervals is computed.
+        </p>
+        <details>
+          <summary>Complete source-bound report JSON</summary>
+          <pre id="report"></pre>
+        </details>
+        <div class="buttons">
+          <button id="copy">Copy complete JSON</button
+          ><button id="download">Download complete JSON</button>
+        </div>
+        <p id="status" role="status" aria-live="polite"></p>
+        <nav>
+          <a href="https://github.com/midya8/kernellab/blob/main/JOINT.md"
+            >Derivation, reproduction and limits</a
+          ><a href="https://github.com/midya8/kernellab">Source</a>
+        </nav>
+        <p class="caption">
+          Synthetic controls, standard Gaussian conditioning and linear
+          covariance formulas. No uploaded data, telemetry, external inference,
+          paid service, new theorem or performance claim.
+        </p>
+      </section>
+    </main>
+    <script src="inference.js"></script>
+    <script src="joint-json.js"></script>
+    <script src="joint-engine.js"></script>
+    <script src="joint-data.js"></script>
+    <script src="joint-app.js"></script>
+  </body>
+</html>

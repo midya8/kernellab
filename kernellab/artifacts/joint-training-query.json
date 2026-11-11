@@ -1,0 +1,350 @@
+{
+  "description": "Noiseless training query is deterministic under fixed assumptions; a separate unobserved query remains random.",
+  "input": {
+    "queries": [
+      [
+        0.0
+      ],
+      [
+        1.0
+      ]
+    ],
+    "training": {
+      "kernel": {
+        "jitter": 0.0,
+        "length_scale": 1.0,
+        "noise_variance": 0.0,
+        "prior_mean": 0.0,
+        "signal_variance": 1.0
+      },
+      "rows": [
+        [
+          0.0
+        ]
+      ],
+      "targets": [
+        0.0
+      ]
+    },
+    "weights": [
+      [
+        1.0,
+        -1.0
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ]
+  },
+  "name": "training-query",
+  "report": {
+    "clamped_contrast_diagonals": [],
+    "conditioning_reduction": [
+      [
+        0.15481812174617549,
+        0.31606027941427883
+      ],
+      [
+        0.31606027941427883,
+        0.6452351901491773
+      ]
+    ],
+    "contracted_latent_covariance": [
+      [
+        0.6321205588285577,
+        -0.31606027941427883
+      ],
+      [
+        -0.31606027941427883,
+        0.15803013970713942
+      ]
+    ],
+    "contrasts": [
+      {
+        "cell_terms": [
+          [
+            0.0,
+            -0.0
+          ],
+          [
+            -0.0,
+            0.6321205588285577
+          ]
+        ],
+        "conditioning_reduction": 0.15481812174617549,
+        "contraction": 0.6321205588285577,
+        "diagonal_only_latent_variance": 0.6321205588285577,
+        "diagonal_only_observation_variance": 0.6321205588285577,
+        "diagonal_sum": 0.6321205588285577,
+        "future_noise_variance": 0.0,
+        "grouped_weights": [
+          1.0,
+          -1.0
+        ],
+        "index": 0,
+        "latent_sd": 0.7950600976206501,
+        "latent_two_sd_interval": [
+          -1.5901201952413002,
+          1.5901201952413002
+        ],
+        "latent_variance": 0.6321205588285577,
+        "mean": 0.0,
+        "numerical_gate": 2.5738773611494663e-10,
+        "observation_sd": 0.7950600976206501,
+        "observation_two_sd_interval": [
+          -1.5901201952413002,
+          1.5901201952413002
+        ],
+        "observation_variance": 0.6321205588285577,
+        "off_diagonal_sum": 0.0,
+        "prior_variance": 0.7869386805747332,
+        "raw_latent_variance": 0.6321205588285577,
+        "signed_contraction_disagreement": 0.0,
+        "weights": [
+          1.0,
+          -1.0
+        ]
+      },
+      {
+        "cell_terms": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.15803013970713942
+          ]
+        ],
+        "conditioning_reduction": 0.6452351901491773,
+        "contraction": 0.15803013970713942,
+        "diagonal_only_latent_variance": 0.15803013970713942,
+        "diagonal_only_observation_variance": 0.15803013970713942,
+        "diagonal_sum": 0.15803013970713942,
+        "future_noise_variance": 0.0,
+        "grouped_weights": [
+          0.5,
+          0.5
+        ],
+        "index": 1,
+        "latent_sd": 0.39753004881032505,
+        "latent_two_sd_interval": [
+          -0.7950600976206501,
+          0.7950600976206501
+        ],
+        "latent_variance": 0.15803013970713942,
+        "mean": 0.0,
+        "numerical_gate": 2.606530659712633e-10,
+        "observation_sd": 0.39753004881032505,
+        "observation_two_sd_interval": [
+          -0.7950600976206501,
+          0.7950600976206501
+        ],
+        "observation_variance": 0.15803013970713942,
+        "off_diagonal_sum": 0.0,
+        "prior_variance": 0.8032653298563167,
+        "raw_latent_variance": 0.15803013970713942,
+        "signed_contraction_disagreement": 0.0,
+        "weights": [
+          0.5,
+          0.5
+        ]
+      }
+    ],
+    "diagonal_only_latent_covariance": [
+      [
+        0.6321205588285577,
+        -0.31606027941427883
+      ],
+      [
+        -0.31606027941427883,
+        0.15803013970713942
+      ]
+    ],
+    "future_noise_covariance": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "grouped_queries": [
+      [
+        0.0
+      ],
+      [
+        1.0
+      ]
+    ],
+    "grouped_weights": [
+      [
+        1.0,
+        -1.0
+      ],
+      [
+        0.5,
+        0.5
+      ]
+    ],
+    "identical_query_groups": [
+      [
+        0
+      ],
+      [
+        1
+      ]
+    ],
+    "input": {
+      "queries": [
+        [
+          0.0
+        ],
+        [
+          1.0
+        ]
+      ],
+      "training": {
+        "kernel": {
+          "jitter": 0.0,
+          "length_scale": 1.0,
+          "noise_variance": 0.0,
+          "prior_mean": 0.0,
+          "signal_variance": 1.0
+        },
+        "rows": [
+          [
+            0.0
+          ]
+        ],
+        "targets": [
+          0.0
+        ]
+      },
+      "weights": [
+        [
+          1.0,
+          -1.0
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    "latent_covariance": [
+      [
+        0.6321205588285577,
+        -0.31606027941427883
+      ],
+      [
+        -0.31606027941427883,
+        0.15803013970713942
+      ]
+    ],
+    "means": [
+      0.0,
+      0.0
+    ],
+    "observation_covariance": [
+      [
+        0.6321205588285577,
+        -0.31606027941427883
+      ],
+      [
+        -0.31606027941427883,
+        0.15803013970713942
+      ]
+    ],
+    "projected_prior_covariance": [
+      [
+        0.7869386805747332,
+        0.0
+      ],
+      [
+        0.0,
+        0.8032653298563167
+      ]
+    ],
+    "projected_training_cross": [
+      [
+        0.3934693402873666
+      ],
+      [
+        0.8032653298563167
+      ]
+    ],
+    "query_posterior": {
+      "diagnostics": {
+        "clamped_latent_diagonals": 0,
+        "negative_variance_tolerance": 1e-10
+      },
+      "latent_covariance": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.6321205588285577
+        ]
+      ],
+      "latent_variances": [
+        0.0,
+        0.6321205588285577
+      ],
+      "means": [
+        0.0,
+        0.0
+      ],
+      "observation_covariance": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.6321205588285577
+        ]
+      ],
+      "observation_variances": [
+        0.0,
+        0.6321205588285577
+      ],
+      "scope": "Observation variances add noise_variance, not training-only jitter. Pointwise Gaussian model distributions, not distribution-free confidence/coverage guarantees. Input scaling and hyperparameters are caller-owned."
+    },
+    "query_prior_covariance": [
+      [
+        1.0,
+        0.6065306597126334
+      ],
+      [
+        0.6065306597126334,
+        1.0
+      ]
+    ],
+    "query_training_cross": [
+      [
+        1.0
+      ],
+      [
+        0.6065306597126334
+      ]
+    ],
+    "raw_latent_covariance": [
+      [
+        0.6321205588285577,
+        -0.31606027941427883
+      ],
+      [
+        -0.31606027941427883,
+        0.15803013970713942
+      ]
+    ],
+    "scope": "Fixed supplied RBF GP, explicit training jitter and iid future observation noise. Linear functionals of one joint posterior, not independent query marginals. Repeated latent coordinates coalesce; repeated future observations retain independent noise. Binary64 numerical diagnostics, not PSD, calibration, simultaneous coverage or optimum certificates.",
+    "version": "kernellab_joint_v1"
+  }
+}
