@@ -1,10 +1,10 @@
 # KernelLab
 
-Exact small-data Gaussian-process regression from scratch: fixed RBF kernel,
-Cholesky conditioning, latent versus observation uncertainty, log marginal
-likelihood and row leave-one-out diagnostics. Dependency-free Python 3.10+,
-36 tests, train/predict JSON CLI and an offline, reproducible visual demo.
-Standard GP theory, not a new method or a scalable GP package.
+A small fixed-parameter Gaussian-process library with Cholesky conditioning,
+full posterior covariance, linear-contrast uncertainty, target-response weights
+and finite-candidate expected improvement. Python uses only the standard
+library. The browser inspectors run locally without a server.
+Standard GP formulas, not a new method or a large-scale GP package.
 
 ![Two fixed GP length scales, same observations and shared axes](assets/posterior.svg)
 
@@ -235,3 +235,21 @@ python -m kernellab response-report
 python -m kernellab response --input examples/response.json
 node --test tests/*.cjs
 ```
+
+
+## v0.3: the uncertainty of a difference needs the cross terms
+
+[Open the joint-covariance workbench](https://midya8.github.io/kernellab/joint.html). Supply up to eight queries and four signed linear weight rows. Compare `W Sigma W^T` with a diagonal-only law that keeps the same pointwise means and variances but discards dependence. Every covariance, weighted pair term and cross-contrast covariance stays visible, with full JSON input editing and download.
+
+Two synthetic controls have identical pointwise means and variances, yet the variance of their latent difference is `1.729329434` versus `0`. The diagonal-only law gives `1.264241118` in both. Two observations at the same coordinate share one latent value but have distinct iid future noises; their difference variance is `0.4` when the noise variance is `0.2`. Training jitter is not future noise. Mean ±2SD intervals are for one scalar model distribution, not simultaneous bands or empirical coverage guarantees.
+
+```sh
+python examples/joint_controls.py
+python -m kernellab.joint input.json > report.json
+python -m unittest discover -s tests -v
+node --test tests/*.cjs
+```
+
+58 Python tests and nine Node/actual-Chrome tests retain the earlier 43/four. Independent Decimal80 kernels and pivoted Gauss-Jordan solves check 12 controls plus 72 generated systems. Independent browser LDL versus native Cholesky full reports agree on 12 controls plus 100 generated cases. Actual Chrome checks 24 contrasts, 48 modes, 640 cells, 36 layouts, physical input and two real downloads replayed natively. Installed replay retains all earlier CLI/demo/response results and reproduces all new controls.
+
+The separate API limits training to 16 rows, queries to eight, features to two and weight rows to four. Signed weights in `[-10,10]` are not normalized. Other training bounds remain the earlier contract. Singular query laws are allowed; singular training covariance still refuses without caller-supplied noise/jitter. Raw variance subtractions, small-negative clamps and comparison gates are explicit, not PSD or forward-error certificates. [JOINT.md](JOINT.md) gives the derivation, schema and limits. The earlier GP, acquisition and target-response computations are unchanged.
