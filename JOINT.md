@@ -38,7 +38,7 @@ python -m pip install --target /tmp/installed /tmp/wheels/*.whl
 bash examples/verify_wheel.sh /tmp/installed
 ```
 
-Open `docs/joint.html` locally or use the deployed workbench. The browser accepts the same complete input, independently computes the report and can copy or download it. To replay a downloaded report, extract its `input` for the native command. Replay is not an independent archive-verification certificate. Runtime Python uses only the standard library; Node22+ and actual Chrome are needed for the web tests.
+Open `docs/joint.html` locally or use the deployed workbench. The browser accepts the same complete input, independently computes the report and can copy or download it. To replay a downloaded report, extract its `input` for the native command. Replay is not an independent archive-verification certificate. Runtime Python uses only the standard library; Node 22+ and actual Chrome are needed for the web tests.
 
 ## The joint law
 
@@ -145,25 +145,25 @@ A scalar interval is not a simultaneous band for all query values, all contrasts
 
 Twelve synthetic controls cover opposite-side negative covariance, repeated latent/noisy queries, nearby positive covariance, a noiseless training query, zero weights, shared observation noise, explicit training jitter, two-feature signed weights, underflowed training-query covariance, tiny signal scale and a large mean/target. None are selected by a measured accuracy result.
 
-- The current suite has 58 Python tests, retaining the earlier43. Fifteen new tests include an independent Decimal80 implementation with Decimal exponential kernels and pivoted Gauss-Jordan inversion, with no native factorization, grouping, covariance or parser code. It checks all12controls and72fixed-seed generated systems, including every projected mean/covariance and the saved query covariances for the controls.
-- Nine Node/actual-Chrome tests retain the earlier four. Full native reports match independent LDL browser reports on all12controls plus100generated systems using `2e-9*(1+abs(reference))` numeric tolerance. Structures, strings, groups and indices match exactly; whole-report binary floating identity is not expected.
-- Actual Chrome checks24contrasts in both modes,48mode selections,640displayed covariance/pair/projected cells,36responsive layouts, trusted contrast selection and JSON edits, invalid-state clearing, clipboard success/failure and two completed JSON downloads replayed natively. Displayed numbers use `2e-8*(1+abs(reference))` tolerance. Desktop/mobile pixels are inspected separately from numeric assertions.
-- Exact repeated-value cancellation, scalar sign/scaling, query/training permutation, unchanged covariance under target edits, explicit noise cross covariance, every-cell contraction, the full16/8/2/4resource budget, strict shapes/bounds, no mutation and singular-training refusal are checked.
-- Installed replay imports nine modules, reproduces earlier seven main CLI commands, all202response witnesses/3030target-response predictions, original regression/optimization results and the new12controls, new CLI and12invalid-weight refusals outside the checkout. Original charts still reproduce without changes.
+- The current suite has 58 Python tests, retaining the earlier 43. Fifteen new tests include an independent Decimal80 implementation with Decimal exponential kernels and pivoted Gauss-Jordan inversion, with no native factorization, grouping, covariance or parser code. It checks all 12 controls and 72 fixed-seed generated systems, including every projected mean/covariance and the saved query covariances for the controls.
+- Nine Node/actual-Chrome tests retain the earlier four. Full native reports match independent LDL browser reports on all 12 controls plus 100 generated systems using `2e-9*(1+abs(reference))` numeric tolerance. Structures, strings, groups and indices match exactly; whole-report binary floating identity is not expected.
+- Actual Chrome checks 24 contrasts in both modes, 48 mode selections, 640 displayed covariance/pair/projected cells, 36 responsive layouts, trusted contrast selection and JSON edits, invalid-state clearing, clipboard success/failure and two completed JSON downloads replayed natively. Displayed numbers use `2e-8*(1+abs(reference))` tolerance. Desktop/mobile pixels are inspected separately from numeric assertions.
+- Exact repeated-value cancellation, scalar sign/scaling, query/training permutation, unchanged covariance under target edits, explicit noise cross covariance, every-cell contraction, the full 16/8/2/4 resource budget, strict shapes/bounds, no mutation and singular-training refusal are checked.
+- Installed replay imports nine modules, reproduces earlier seven main CLI commands, all 202 response witnesses/3,030 target-response predictions, original regression/optimization results and the new 12 controls, new CLI and 12 invalid-weight refusals outside the checkout. Original charts still reproduce without changes.
 
 ## Bounds and costs
 
-- Training1-16rows, query1-8rows, matching1-2features. One to four weight rows; each has one coefficient per original query occurrence, finite in `[-10,10]`. Zero rows of weights and repeated query coordinates are valid.
+- Training 1-16 rows, query 1-8 rows, matching 1-2 features. One to four weight rows; each has one coefficient per original query occurrence, finite in `[-10,10]`. Zero rows of weights and repeated query coordinates are valid.
 - Existing training bounds remain: coordinates, targets and supplied mean in `[-1e6,1e6]`; length scale `[1e-6,1e6]`, signal variance `[1e-12,1e6]`, noise variance `[0,1e6]`, explicit jitter `[0,.01]`. Booleans, nonfinite values, unknown keys and wrong shapes reject.
-- CLI/browser JSON is capped at64KiB; duplicate keys reject. Browser nesting is capped at64. The API accepts structured Python values; the file boundary is where duplicate JSON keys and byte length are checked. No partial JSON on a CLI error.
+- CLI/browser JSON is capped at 64 KiB; duplicate keys reject. Browser nesting is capped at 64. The API accepts structured Python values; the file boundary is where duplicate JSON keys and byte length are checked. No partial JSON on a CLI error.
 - Dense original conditioning costs O(n³); queries add O(mn²+m²n), and q linear forms add O(qn²+q²(n+m²)). Full reports retain query/cross/projected matrices and q complete m×m pair tables, bounded storage O(n²+mn+m²+qn+q²+qm²). Native deliberately refactors for its independent projected computation rather than advertising a speed optimization.
 
 No large-scale/runtime promise, learned kernel, inference server, multi-output GP, derivative observations, sampling, noisy/batch acquisition, training-parameter sensitivity, probability-of-all-events estimate, PSD certificate or new theorem.
 
 ## Sources and convention
 
-- Rasmussen and Williams, [GPML Chapter2](https://gaussianprocess.org/gpml/chapters/RW2.pdf), equations2.23-2.24 and discussion of joint predictions/noisy targets: full posterior covariance, including possible negative posterior cross covariance.
-- [GPML AppendixA](https://gaussianprocess.org/gpml/chapters/RWA.pdf): Gaussian identities and conditioning.
+- Rasmussen and Williams, [GPML Chapter 2](https://gaussianprocess.org/gpml/chapters/RW2.pdf), equations 2.23-2.24 and discussion of joint predictions/noisy targets: full posterior covariance, including possible negative posterior cross covariance.
+- [GPML Appendix A](https://gaussianprocess.org/gpml/chapters/RWA.pdf): Gaussian identities and conditioning.
 - [Stanford STATS305C Normal Theory](https://web.stanford.edu/class/stats305c/lectures/Normal_Theory.html) and [Duke multivariate normal theory](https://www2.stat.duke.edu/courses/Fall16/sta721/slides/NormalTheory/multnorm.pdf): linear combinations and covariance terms.
 - [SciPy multivariate_normal documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.multivariate_normal.html): singular Gaussian laws differ from nonsingular-density requirements. This module computes no density and does not claim SciPy's implementation or its validation.
 - [scikit-learn Gaussian-process documentation](https://scikit-learn.org/stable/modules/gaussian_process.html): covariance versus marginal-SD outputs; its alpha/WhiteKernel conventions are not silently substituted for this repository's explicit jitter/future-noise contract.
