@@ -227,7 +227,7 @@ MIT license.
 
 [Open the live conditioning inspector](https://midya8.github.io/kernellab/). Keep both original fixed kernels, all 15 observations and all original metrics while editing one target and an arbitrary query. Signed target-response weights, complete additive terms and separate latent/observation bands make the fixed-assumption boundary visible. Narrower bands still do not rescue the original misspecified model.
 
-43 Python tests and four Node/actual-Chrome tests include 202 complete response witnesses, 3,030 direct target-edit predictions, 48 high-precision tiny-system controls and every original GP/acquisition test. Installed reproduction imports eight modules and runs seven main commands plus full archive regeneration. No new fit selection, causal attribution, calibration or performance claim. [RESPONSE.md](RESPONSE.md) gives derivation, residual/roundoff gates, source distinctions and reproduction.
+The earlier response release had 43 Python tests and four Node/actual-Chrome tests, including 202 complete response witnesses, 3,030 direct target-edit predictions, 48 high-precision tiny-system controls and every original GP/acquisition test. That release imported eight modules and ran seven main commands plus full archive regeneration. The joint-contrast release below retains these checks and adds a ninth module. No new fit selection, causal attribution, calibration or performance claim. [RESPONSE.md](RESPONSE.md) gives derivation, residual/roundoff gates, source distinctions and reproduction.
 
 ```sh
 python -m kernellab.response_export
